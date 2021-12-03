@@ -2,10 +2,11 @@ drop schema "public" cascade;
 
 create schema "public";
 
-CREATE TABLE "public"."users" (
+CREATE TABLE "public.users" (
 	"first_name" VARCHAR(255) NOT NULL,
 	"last_name" VARCHAR(255) NOT NULL,
-	"email" VARCHAR(255) NOT NULL UNIQUE
+	"email" VARCHAR(255) NOT NULL UNIQUE,
+	"id" serial NOT NULL UNIQUE
 ) WITH (
   OIDS=FALSE
 );
