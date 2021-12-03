@@ -2,12 +2,43 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Foundation\Bus\DispatchesJobs;
-use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Models\User;
 
-class Controller extends BaseController
+
+class UserAPIController extends Controller
 {
-    use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+    public function getAllUsers() {
+        $users = User::all();
+        return response($users, 200);
+    }
+
+    public function createUser(Request $request) {
+        $request->validate([
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'email' => 'required'
+        ]);
+        $user = User::create($request->all());
+
+        return response($user, 201);
+    }
+
+    public function updateUser(Request $request, $id) {
+        $request->validate([
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'email' => 'required'
+        ]);
+        if (User::where('id', $id)->exists()) {
+            $user = User::where('id', $id);
+            $user->update($request->all());
+            return response($user, 200);
+        } else {
+            return response()->json([
+                "message" => 'user does not exist'
+            ], 404);
+        }
+    }
 }
